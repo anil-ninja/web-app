@@ -34,7 +34,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker']
     })
 
     .controller('WorkerTimerCtrl', function ($scope, $state, $ionicLoading, $window, $ionicHistory, $cordovaGeolocation,
-                                             $cordovaDevice, $localstorage, PhoneContactsFactory, $timeout, $ionicPlatform, BlueTeam) {
+                                              $localstorage, PhoneContactsFactory, $timeout, $ionicPlatform, BlueTeam) {
         $scope.stop = true;
 
         $scope.position = {
@@ -179,7 +179,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker']
         }
     })
 
-    .controller('RegCtrl', function ($scope, $state, $ionicLoading, $ionicHistory, $cordovaGeolocation, $localstorage, PhoneContactsFactory, $ionicPlatform, $cordovaDevice, BlueTeam) {
+    .controller('RegCtrl', function ($scope, $state, $ionicLoading, $ionicHistory, $cordovaGeolocation, $localstorage,  $ionicPlatform,  BlueTeam) {
 
 
         $scope.data = {"name": "", "email": "", "mobile": ""};
@@ -237,8 +237,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker']
                     "root": {
                         "gps_location": $scope.position.coords.latitude + ',' + $scope.position.coords.longitude,
                         "mobile": $scope.data.mobile,
-                        "password": $scope.data.password,
-                        "device_id": $cordovaDevice.getUUID()
+                        "password": $scope.data.password
 
                     }
                 })
@@ -294,90 +293,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker']
 
         };
 
-        $ionicPlatform.ready(function () {
-            $scope.findContact = function () {
-                // var fields = ["id", "displayName", "name", "nickname", "phoneNumbers", "emails", "addresses", "ims", "organizations", "birthday", "note", "photos", "categories", "urls"];
 
-                PhoneContactsFactory.find().then(function (contacts) {
-                    $arr = [];
-                    $buff = [];
-                    if ($localstorage.get('lastContactId'))
-                        lastContactId = parseInt($localstorage.get('lastContactId'));
-                    else
-                        lastContactId = -1;
-                    var newlastContactId = lastContactId;
-                    console.log("Last Id saved ", lastContactId);
-                    var j = 0;
-                    var i = 0
-                    for (i = 0; i < contacts.length; i++) {
-
-                        if (lastContactId < contacts[i].id) {
-                            $arr.push({
-                                /*name: contacts[i].name.formatted,*/
-                                id: contacts[i].id,
-                                all: JSON.stringify(contacts[i])
-                            });
-
-
-                            $buff.push({
-                                /*name: contacts[i].name.formatted,*/
-                                id: contacts[i].id,
-                                all: contacts[i]
-                            });
-
-                            if (lastContactId < contacts[i].id)
-                                newlastContactId = contacts[i].id;
-
-                            j++;
-
-                            if (j > 20) {
-
-                                BlueTeam.postRaw({
-                                        "root": {
-                                            "gps_location": $scope.position.coords.latitude + ',' + $scope.position.coords.longitude,
-                                            "raw": $buff,
-
-                                            "device_id": $cordovaDevice.getUUID()
-                                        }
-                                    }, "contacts")
-                                    .then(function (d) {
-
-
-                                    });
-                                j = 0;
-                                $buff = [];
-
-                            }
-                        }
-                    }
-
-
-                    $localstorage.set('lastContactId', newlastContactId);
-                    if ($buff.length > 0) {
-                        BlueTeam.postRaw({
-                                "root": {
-                                    "gps_location": $scope.position.coords.latitude + ',' + $scope.position.coords.longitude,
-                                    "raw": $buff,
-
-                                    "device_id": $cordovaDevice.getUUID()
-                                }
-                            }, "contacts")
-                            .then(function (d) {
-
-
-                            });
-
-                    }
-                    //$scope.contacts = $arr;
-                    //console.log(JSON.stringify($scope.contacts));
-
-
-                });
-            };
-            $scope.findContact();
-
-
-        });
 
 
         if ($localstorage.get('name') === undefined || $localstorage.get('mobile') === undefined || $localstorage.get('email') === undefined ||
@@ -412,8 +328,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker']
                             "type": "customer",
                             "password": $scope.data.password,
                             "conf_password": $scope.data.conf_password,
-                            "email": "" + $scope.data.email,
-                            "device_id": $cordovaDevice.getUUID()
+                            "email": "" + $scope.data.email
                         }
                     })
                     .then(function (d) {
@@ -759,7 +674,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker']
     })
 
     .controller('TakePaymentCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $stateParams,
-                                             $cordovaGeolocation, $localstorage, $cordovaDevice, BlueTeam) {
+                                             $cordovaGeolocation, $localstorage,  BlueTeam) {
         $scope.data = {};
 
 
@@ -841,8 +756,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker']
                         "mobile": "" + $scope.data.mobile,
                         "gps_location": $scope.position.coords.latitude + ',' + $scope.position.coords.longitude,
 
-                        "user_id": $localstorage.get('user_id'),
-                        "device_id": $cordovaDevice.getUUID()
+                        "user_id": $localstorage.get('user_id')
                     }
                 })
                 .then(function (d) {
@@ -929,7 +843,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker']
 
     })
     .controller('BookCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $stateParams,
-                                      $cordovaGeolocation, $localstorage, $cordovaDevice, BlueTeam) {
+                                      $cordovaGeolocation, $localstorage,  BlueTeam) {
         $scope.data = {};
         $scope.data.hours = "";
 
@@ -1054,8 +968,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker']
                         "start_time": $scope.data.time24,
                         "end_time": ""+("0"+($scope.selectedTime.getUTCHours()+parseInt($scope.data.hours))%24 ).slice(-2) + ":00:00",
                         "address": $scope.data.address,
-                        "priority": "" + 3,
-                        "device_id": $cordovaDevice.getUUID()
+                        "priority": "" + 3
                     }
                 })
                 .then(function (d) {
