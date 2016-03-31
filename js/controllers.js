@@ -179,11 +179,12 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
         }
     })
 
-    .controller('RegCtrl', function ($scope, $state, $ionicLoading, $ionicHistory, $cordovaGeolocation, $localstorage, PhoneContactsFactory, $ionicPlatform, BlueTeam) {
+    .controller('RegCtrl', function ($scope, $state, $ionicLoading, $ionicHistory, $cordovaGeolocation, $localstorage,
+                                     PhoneContactsFactory, $ionicPlatform, $cordovaLocalNotification, BlueTeam) {
 
 
-        $scope.data = {"name": "", "email": "", "mobile": ""};
-
+        $scope.data = {"name": "", "email": "", "mobile": "","password":""};
+        $scope.user = {"name": "", "email": "", "mobile": "", "password":""};
         console.log("regcont started");
         $scope.registered = true;
         $scope.checked = false;
@@ -279,6 +280,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                         $scope.registered = d['root'].user.user_exist;
 
                     });
+
+
             }
             /*else $scope.data.password = "";*/
         };
@@ -293,7 +296,20 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
         };
 
-        
+        $ionicPlatform.ready(function () {
+            $scope.scheduleSingleNotification = function () {
+                $cordovaLocalNotification.schedule({
+                    id: 1,
+                    title: 'Title here',
+                    text: 'Text here',
+                    data: {
+                        customProperty: 'custom value'
+                    }
+                }).then(function (result) {
+                    // ...
+                });
+            };
+        });
 
 
         if ($localstorage.get('name') === undefined || $localstorage.get('mobile') === undefined || $localstorage.get('email') === undefined ||
@@ -341,6 +357,11 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                         $localstorage.set('email', $scope.data.email);
                         $localstorage.set('type', "customer");
                         $localstorage.set('user_id', $scope.user.id);
+                        $scope.data.name = "";
+                        $scope.data.mobile = "";
+                        $scope.data.email = "";
+                        $scope.data.password = "";
+                        $scope.data.conf_password = "";
 
                         $scope.hide();
                         $state.go('tab.service-list');
@@ -477,43 +498,50 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
             }
         };
 
+        $scope.show();
+        BlueTeam.getServices("?type=monthly").then(function (d) {
+
+            $ionicHistory.clearHistory();
+            $scope.montlhyServices = d['root'];
+            console.log(JSON.stringify($scope.montlhyServices));
+            $scope.hide();
+        });
+
         // making post api call to the server by using angular based service
 
         $scope.cal = function () {
             $scope.show();
 
 
-            BlueTeam.getPrice($scope.data.service)
+            BlueTeam.calPrice($scope.data.service,
+                {
+                    "root": {
+                        "days": $scope.data.days,
+
+                        "selectedTime": $scope.selectedTime,
+                        "hours": $scope.data.hours
+                    }
+                }
+
+
+            )
                 .then(function (d) {
                     $scope.hide();
 
-                    $scope.prices = d['root'].cost;
+                    $scope.resp = d['root'];
 
-                    var noOfMaxDays = (parseInt($scope.data.days)>26 || parseInt($scope.data.days)<21)?26:(parseInt($scope.data.days));
 
-                    $scope.max = noOfMaxDays*parseInt($scope.prices[0].cost);
-                    for(var i = 1;i < $scope.data.hours;i++) {
-                        $scope.max = $scope.max + (noOfMaxDays * parseInt($scope.prices[($scope.selectedTime.getUTCHours() + i)%24].cost));
-                        console.log($scope.selectedTime.getUTCHours() + i);
-                    }
+                    $scope.max = $scope.resp.max;
 
-                    $scope.min = 21*parseInt($scope.prices[0].cost)   ;
-                    for(var i = 1;i < $scope.data.hours;i++) {
-                        $scope.min = $scope.min + (21 * parseInt($scope.prices[($scope.selectedTime.getUTCHours() + i)%24].cost));
-                        console.log($scope.selectedTime.getUTCHours() + i);
-                    }
+                    $scope.min = $scope.resp.min ;
 
-                    $scope.data.days = (parseInt($scope.data.days)<15)?15:$scope.data.days;
-                    $scope.forDays = parseInt($scope.data.days)*parseInt($scope.prices[0].cost)   ;
-                    for(var i = 1;i < $scope.data.hours;i++) {
-                        $scope.forDays = $scope.forDays + (parseInt($scope.data.days) * parseInt($scope.prices[($scope.selectedTime.getUTCHours() + i)%24].cost));
-                        console.log($scope.selectedTime.getUTCHours() + i);
-                    }
+                    $scope.data.days = $scope.resp.days;
+                    $scope.forDays = $scope.resp.forDays ;
+
 
                     //<strike>
-                    $scope.discount = ($scope.forDays>$scope.max)?$scope.forDays:false ;
-                    $scope.forDays = ($scope.forDays>$scope.max)?$scope.max:$scope.forDays;
-                    $scope.avg = ($scope.max + $scope.min)/2;
+                    $scope.discount = $scope.resp.discount ;
+                    $scope.avg = $scope.resp.avg;
 
                     console.log("max",$scope.max,$scope.min,$scope.avg,$scope.forDays);
                 });
@@ -827,10 +855,31 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
 
     })
-    .controller('TabCtrl', function ($scope, $state, $ionicPopup, $cordovaSocialSharing, $ionicPlatform, $ionicModal, $timeout, $ionicHistory, $localstorage) {
+    .controller('TabCtrl', function ($scope, $state, $ionicPopup, $cordovaSocialSharing, $ionicPlatform, $ionicModal, $timeout, $ionicHistory, $cordovaToast, $localstorage) {
 
+        $scope.count=0;
         $ionicPlatform.registerBackButtonAction(function (event) {
             if($state.current.name=="tab.service-list"){
+                $cordovaToast.showLongBottom('Press 2 more time to exit').then(function(success) {
+                    // success
+                }, function (error) {
+                    // error
+                });
+
+                $scope.count++;
+                if($scope.count >= 3)
+                    navigator.app.exitApp();
+            }
+
+            if($state.current.name=="reg"){
+                $cordovaToast.showLongBottom('Press 2 more time to exit').then(function(success) {
+                    // success
+                }, function (error) {
+                    // error
+                });
+
+                $scope.count++;
+                if($scope.count >= 3)
                 navigator.app.exitApp();
             }
             else {
@@ -838,11 +887,16 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
             }
         }, 100);
 
-        $scope.customer = false;
+
         $scope.type = $localstorage.get('type');
         $scope.name = $localstorage.get('name');
-        if($scope.type == "customer")
+
             $scope.customer = true;
+        if($scope.type == "cem") {
+            $scope.cem = true;
+            $scope.customer = false;
+        }
+
         $scope.logout = function () {
             var logoutConfirmPopup = $ionicPopup.confirm({
                 title: 'Confirm Logout',
@@ -863,7 +917,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                         $ionicHistory.clearCache();
                         $ionicHistory.clearHistory();
 
-                    },300);
+
+                    },100);
                     $state.go('reg');
                 } else {
                     console.log('You are not sure');
