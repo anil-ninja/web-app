@@ -300,8 +300,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
             $scope.scheduleSingleNotification = function () {
                 $cordovaLocalNotification.schedule({
                     id: 1,
-                    title: 'Title here',
-                    text: 'Text here',
+                    title: 'Hi, got net request',
+                    text: 'Need maid',
                     data: {
                         customProperty: 'custom value'
                     }
@@ -309,7 +309,10 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                     // ...
                 });
             };
-        });
+
+            //$scope.scheduleSingleNotification();
+
+            
 
 
         if ($localstorage.get('name') === undefined || $localstorage.get('mobile') === undefined || $localstorage.get('email') === undefined ||
@@ -345,7 +348,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                             "password": $scope.data.password,
                             "conf_password": $scope.data.conf_password,
                             "email": "" + $scope.data.email
-                            //"device_id": $cordovaDevice.getUUID()
+                           // "device_id": $cordovaDevice.getUUID()
                         }
                     })
                     .then(function (d) {
@@ -517,8 +520,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                 {
                     "root": {
                         "days": $scope.data.days,
-
-                        "selectedTime": $scope.selectedTime,
+                        "startHr":selectedTime.getUTCHours(),
+                        "selectedTime": $scope.time24,
                         "hours": $scope.data.hours
                     }
                 }
@@ -1048,7 +1051,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                         "end_time": $scope.data.endTime,
                         "address": $scope.data.address,
                         "priority": "" + 3
-                        //"device_id": $cordovaDevice.getUUID()
+                       // "device_id": $cordovaDevice.getUUID()
                     }
                 })
                 .then(function (d) {
