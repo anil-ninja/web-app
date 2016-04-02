@@ -314,6 +314,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
             
 
+        });
+
 
         if ($localstorage.get('name') === undefined || $localstorage.get('mobile') === undefined || $localstorage.get('email') === undefined ||
                 $localstorage.get('name') === "" || $localstorage.get('mobile') === "") {
