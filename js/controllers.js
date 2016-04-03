@@ -238,8 +238,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                     "root": {
                         "gps_location": $scope.position.coords.latitude + ',' + $scope.position.coords.longitude,
                         "mobile": $scope.data.mobile,
-                        "password": $scope.data.password
-                        //"device_id": $cordovaDevice.getUUID()
+                        "password": $scope.data.password/*,
+                        "device_id": $cordovaDevice.getUUID()*/
 
                     }
                 })
@@ -312,8 +312,6 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
             //$scope.scheduleSingleNotification();
 
-            
-
         });
 
 
@@ -349,8 +347,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                             "type": "customer",
                             "password": $scope.data.password,
                             "conf_password": $scope.data.conf_password,
-                            "email": "" + $scope.data.email
-                           // "device_id": $cordovaDevice.getUUID()
+                            "email": "" + $scope.data.email/*,
+                            "device_id": $cordovaDevice.getUUID()*/
                         }
                     })
                     .then(function (d) {
@@ -522,7 +520,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                 {
                     "root": {
                         "days": $scope.data.days,
-                        "startHr":selectedTime.getUTCHours(),
+                        "startHr":$scope.selectedTime.getUTCHours(),
                         "selectedTime": $scope.time24,
                         "hours": $scope.data.hours
                     }
@@ -820,8 +818,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                         "mobile": "" + $scope.data.mobile,
                         "gps_location": $scope.position.coords.latitude + ',' + $scope.position.coords.longitude,
 
-                        "user_id": $localstorage.get('user_id')
-                        //"device_id": $cordovaDevice.getUUID()
+                        "user_id": $localstorage.get('user_id')/*,
+                        "device_id": $cordovaDevice.getUUID()*/
                     }
                 })
                 .then(function (d) {
@@ -1052,8 +1050,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                         "start_time": $scope.data.startTime,
                         "end_time": $scope.data.endTime,
                         "address": $scope.data.address,
-                        "priority": "" + 3
-                       // "device_id": $cordovaDevice.getUUID()
+                        "priority": "" + 3/*,
+                        "device_id": $cordovaDevice.getUUID()*/
                     }
                 })
                 .then(function (d) {
