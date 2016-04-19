@@ -1,4 +1,4 @@
-<ion-view view-title="Register Worker">
+<ion-view view-title="Register Vender">
     <ion-content class="padding">
 
 
@@ -91,12 +91,13 @@
                 <label class="item item-input ">
                     <span class="input-label"> Select Service </span>
                     <select class='selectpicker' name='service' ng-model="data.service">
-                        <option value='maid'>Maid </option>
-                        <option value='cook'>Cook</option>
-                        <option value='driver'>Driver</option>
-                        <option value='patient_care'>Patient Care</option>
-                        <option value='babysitter'>Babysitter</option>
-                        <option value='security'>Security Guard</option>
+                        <option value='electrician'>Electrician </option>
+                        <option value='plumber'>Plumber</option>
+                        <option value='carpenter'>Carpenter</option>
+                        <option value='ac services'>AC Service</option>
+                        <option value='computer services'>Computer Services</option>
+                        <option value='security services'>Security service</option>
+
                     </select>
                 </label>
                 <div class="padding">
@@ -106,18 +107,13 @@
 
                 </div>
 
-                <input type="hidden" name="type" ng-model="data.type" value="vender" />
+                <input type="hidden" name="type" ng-model="data.type" ng-init="data.type ='vender'"  />
 
                 <input class="button button-block button-positive" type="submit" name="need now" value="Confirm" nav-direction="forward"
                        ng-disabled="addworker-f.$invalid||!data.time24">
 
             </div>
         </form>
-
-
-
-
-
 
 
     </ion-content>
