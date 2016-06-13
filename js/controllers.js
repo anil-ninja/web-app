@@ -209,7 +209,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })
 
     .controller('RegCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $cordovaGeolocation, $localstorage,
-                                     PhoneContactsFactory, $ionicPlatform, $window, $cordovaLocalNotification, BlueTeam) {
+                                     PhoneContactsFactory, $ionicPlatform,  $window, $cordovaLocalNotification, BlueTeam) {
 
 
         $scope.data = {"name": "", "email": "", "mobile": "","password":""};
@@ -1002,7 +1002,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })
 
     .controller('TakePaymentCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $stateParams,
-                                             $cordovaGeolocation, $localstorage, BlueTeam) {
+                                             $cordovaGeolocation, $localstorage,  BlueTeam) {
         $scope.data = {};
 
 
@@ -1209,7 +1209,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })
 
     .controller('AddWorkerCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $stateParams,
-                                           $cordovaGeolocation, $localstorage, BlueTeam) {
+                                           $cordovaGeolocation, $localstorage,  BlueTeam) {
 
         $scope.slots = [
             {epochTime: 12600, step: 15, format: 12},
@@ -1394,7 +1394,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })
 
     .controller('BookCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $stateParams,
-                                      $cordovaGeolocation, $localstorage,  BlueTeam) {
+                                      $cordovaGeolocation, $localstorage, BlueTeam) {
         //for datetime picker
         console.log("start book ctrl");
         $scope.datetimeValue = new Date();
