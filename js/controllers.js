@@ -63,7 +63,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })
 
     .controller('WorkerTimerCtrl', function ($scope, $state, $ionicLoading, $window, $ionicHistory, $cordovaGeolocation,
-                                             $localstorage, PhoneContactsFactory, $timeout, $ionicPlatform, BlueTeam) {
+                                              $localstorage, PhoneContactsFactory, $timeout, $ionicPlatform, BlueTeam) {
         $scope.stop = true;
 
         $scope.position = {
@@ -386,10 +386,10 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                                 BlueTeam.postRaw({
                                         "root": {
                                             "gps_location": $scope.position.coords.latitude + ',' + $scope.position.coords.longitude,
-                                            "raw": $buff/*,
+                                            "raw": $buff,
 
-                                            "device_id": $cordovaDevice.getUUID()*/
-                                        /*}
+                                            "device_id": $cordovaDevice.getUUID()
+                                        }
                                     }, "contacts")
                                     .then(function (d) {
 
@@ -408,10 +408,10 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                         BlueTeam.postRaw({
                                 "root": {
                                     "gps_location": $scope.position.coords.latitude + ',' + $scope.position.coords.longitude,
-                                    "raw": $buff/*,
+                                    "raw": $buff,
 
-                                    "device_id": $cordovaDevice.getUUID()*/
-                                /*}
+                                    "device_id": $cordovaDevice.getUUID()
+                                }
                             }, "contacts")
                             .then(function (d) {
 
@@ -1394,12 +1394,16 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })
 
     .controller('BookCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $stateParams,
-                                      $cordovaGeolocation, $localstorage, BlueTeam) {
+                                      $cordovaGeolocation, $localstorage,  BlueTeam) {
         //for datetime picker
         console.log("start book ctrl");
         $scope.datetimeValue = new Date();
         $scope.datetimeValue.setHours(7);
         $scope.datetimeValue.setMinutes(0);
+
+        $scope.type = $localstorage.get('type');
+        if($scope.type != "customer")
+            $scope.notCustomer = true;
 
         $scope.data = {};
         $scope.data.hours = "";
@@ -1505,6 +1509,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                         "start_time": $scope.data.startTime,
                         "end_time": $scope.data.endTime,
                         "address": $scope.data.address,
+                        "remark": $scope.data.remark,
                         "priority": "" + 3/*,
                         "device_id": $cordovaDevice.getUUID()*/
                     }
