@@ -63,7 +63,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })*/
 
     .controller('WorkerTimerCtrl', function ($scope, $state, $ionicLoading, $window, $ionicHistory, $cordovaGeolocation,
-                                              $localstorage, PhoneContactsFactory, $timeout, $ionicPlatform, BlueTeam) {
+                                             $localstorage, PhoneContactsFactory, $timeout, $ionicPlatform, BlueTeam) {
         $scope.stop = true;
 
         $scope.position = {
@@ -209,7 +209,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })
 
     .controller('RegCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $cordovaGeolocation, $localstorage,
-                                     PhoneContactsFactory, $ionicPlatform,  $window, $cordovaLocalNotification, BlueTeam) {
+                                     PhoneContactsFactory, $ionicPlatform, $window, $cordovaLocalNotification, BlueTeam) {
 
 
         $scope.data = {"name": "", "email": "", "mobile": "","password":""};
@@ -300,6 +300,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                     }
 
                 });
+
+
         }
         $scope.checkReg = function () {
             console.log("trying to check");
@@ -312,6 +314,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                         $scope.registered = d['root'].user.user_exist;
 
                     });
+
+
             }
             /*else $scope.data.password = "";*/
         };
@@ -322,6 +326,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                 $scope.pwdError = true;
             }
             $scope.pwdError = false;
+
+
         };
 
         $ionicPlatform.ready(function () {
@@ -337,6 +343,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                     // ...
                 });
             };
+
             //$scope.scheduleSingleNotification();
         });
 
@@ -688,9 +695,36 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
     })
 
-    .controller('ServiceRequestCtrl', function ($scope, $state, $ionicHistory, $timeout, $stateParams, $localstorage, BlueTeam) {
+    .controller('ServiceRequestCtrl', function ($scope, $state, $ionicPopup, $cordovaGeolocation, $ionicHistory, $timeout, $stateParams, $localstorage, BlueTeam) {
 
         $scope.user_id = $localstorage.get('user_id');
+        $scope.data = {};
+        $scope.data.name = $localstorage.get('name');
+        $scope.data.mobile = parseInt($localstorage.get('mobile'));
+        $scope.data.email = "" + $localstorage.get('email');
+
+        // to get current location of the user
+        var posOptions = {
+            timeout: 10000,
+            enableHighAccuracy: false
+        };
+        $cordovaGeolocation
+            .getCurrentPosition(posOptions)
+            .then(function (position) {
+
+                $scope.position = position;
+
+            }, function (err) {
+                // error
+                console.log(JSON.stringify(err));
+                $scope.position = {
+                    "coords": {
+                        "longitude": null,
+                        "latitude": null
+                    }
+                };
+            });
+
         BlueTeam.getMysr($localstorage.get('mobile'))
             .then(function (d) {
 
@@ -736,6 +770,68 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                     $scope.$broadcast('scroll.refreshComplete');
                 });
         };
+
+        $scope.data.feedback_text = null;
+
+
+
+        // An elaborate, custom popup
+        $scope.inform =  function () {
+            var sendInfoPopup = $ionicPopup.show({
+                template: '<input type="text" ng-model="data.feedback_text"/>',
+                title: 'Please Type what you inform about?',
+                subTitle: 'You can inform here about the worker holiday or anything you want to communicate to BlueTeam.',
+                scope: $scope,
+                buttons: [
+                    { text: 'Cancel' },
+                    {
+                        text: '<b>Send</b>',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            if (!$scope.data.feedback_text) {
+                                //don't allow the user to close unless he enters wifi password
+                                e.preventDefault();
+
+                            } else {
+
+                                return $scope.data.feedback_text;
+                            }
+                        }
+                    }
+                ]
+            });
+
+            sendInfoPopup.then(function(res) {
+                console.log("tep",res);
+                if(res){
+                    $scope.feedback();
+                }
+            });
+        };
+
+        $scope.feedback = function () {
+            //$scope.show();
+
+
+            BlueTeam.postFeedback({
+                    "root": {
+                        "name": $scope.data.name,
+                        "mobile": "" + $scope.data.mobile,
+                        "gps_location": $scope.position.coords.latitude + ',' + $scope.position.coords.longitude,
+                        "email": $scope.data.email,
+                        "feedback": $scope.data.feedback_text
+                    }
+                })
+                .then(function (d) {
+                    //$scope.hide();
+                    //$ionicHistory.clearHistory();
+                    //$state.go('finish');
+                    //$scope.services = d['data']['services'];
+                });
+        };
+
+
+
 
         $scope.toggleItem = function (item) {
             if ($scope.isItemShown(item)) {
@@ -816,7 +912,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
         $scope.rating.max = 5;
 
-        $scope.update = function(key,value,sr_id){
+        $scope.update = function(key,value,sr_id,index){
             var updateConfirmPopup = $ionicPopup.confirm({
                 title: 'Confirm Update',
                 template: 'Are you sure to Update?'
@@ -840,9 +936,10 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                             }
                         })
                         .then(function (d) {
-                            $timeout(function () {
+                            $scope.srs[index].dontshow = true;
+                            /*$timeout(function () {
                                 $window.location.reload(true);
-                            }, 10000);
+                            }, 10000);*/
                             //$scope.work.log_id = d['root'].id;
 
                         });
@@ -912,7 +1009,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })
 
     .controller('TakePaymentCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $stateParams,
-                                             $cordovaGeolocation, $localstorage,  BlueTeam) {
+                                             $cordovaGeolocation, $localstorage, BlueTeam) {
         $scope.data = {};
 
 
@@ -1112,14 +1209,14 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
         $scope.share = function () {
             $cordovaSocialSharing.share("Get relief from Cook/Maid/Driver/Babysitter on leave. " +
                 "Book Now on-demand/monthly to get reliable and Blueteam verified worker. " +
-                "https://goo.gl/EGxeu3", "Book Now BlueTeam Verified Workers");
+                "https://goo.gl/545wov", "Book Now BlueTeam Verified Workers");
         };
 
 
     })
 
     .controller('AddWorkerCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $stateParams,
-                                           $cordovaGeolocation, $localstorage,  BlueTeam) {
+                                           $cordovaGeolocation, $localstorage, $cordovaBarcodeScanner, BlueTeam) {
 
         $scope.slots = [
             {epochTime: 12600, step: 15, format: 12},
@@ -1138,6 +1235,16 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
             $scope.cem = true;
             $scope.customer = false;
         }
+
+        $scope.scanBarcode = function() {
+            $cordovaBarcodeScanner.scan().then(function(imageData) {
+                alert(imageData.text);
+                console.log("Barcode Format -> " + imageData.format);
+                console.log("Cancelled -> " + imageData.cancelled);
+            }, function(error) {
+                console.log("An error happened -> " + error);
+            });
+        };
 
         $scope.data.hours = "";
         $scope.selectedTime = new Date();
@@ -1306,12 +1413,12 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     .controller('BookCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $stateParams,
                                       $cordovaGeolocation, $localstorage, BlueTeam) {
         //for datetime picker
-         $timeout(function () {
-                $scope.datetimeValue.setHours(7);
-            }, 5000);
         console.log("start book ctrl");
+        $timeout(function () {
+            $scope.datetimeValue.setHours(7);
+        }, 5000);
         $scope.datetimeValue = new Date();
-        
+       // $scope.datetimeValue.setHours(7);
         $scope.datetimeValue.setMinutes(0);
 
         $scope.type = $localstorage.get('type');
@@ -1320,6 +1427,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
         $scope.data = {};
         $scope.data.hours = "";
+
         if (window.services === undefined)
             $state.go('tab.service-list');
 
@@ -1417,7 +1525,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                         "user_id": $localstorage.get('user_id'),
                         "start_datatime": $scope.data.drv+"",
                         "service_type": $scope.type,
-                        "remarks": $scope.type + " this is request by web app",
+                        "remarks": $scope.type + " by mobile app," + $scope.data.remark,
                         "start_time": $scope.data.startTime,
                         "end_time": $scope.data.endTime,
                         "address": $scope.data.address,
