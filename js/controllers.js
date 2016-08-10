@@ -58,6 +58,10 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
     })
 
+    /*.controller('ContactCtrl', function ($scope, Contactlist) {
+        $scope.contacts = Contactlist.getAllContacts();
+    })*/
+
     .controller('WorkerTimerCtrl', function ($scope, $state, $ionicLoading, $window, $ionicHistory, $cordovaGeolocation,
                                              $localstorage, PhoneContactsFactory, $timeout, $ionicPlatform, BlueTeam) {
         $scope.stop = true;
@@ -205,7 +209,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })
 
     .controller('RegCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $cordovaGeolocation, $localstorage,
-                                     PhoneContactsFactory, $ionicPlatform, $window, $cordovaLocalNotification, BlueTeam) {
+                                     PhoneContactsFactory, $ionicPlatform,  $window, $cordovaLocalNotification, BlueTeam) {
 
 
         $scope.data = {"name": "", "email": "", "mobile": "", "password": ""};
@@ -341,6 +345,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
             };
 
             //$scope.scheduleSingleNotification();
+
         });
 
 
@@ -376,8 +381,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                             "type": "customer",
                             "password": $scope.data.password,
                             "conf_password": $scope.data.conf_password,
-                            "email": "" + $scope.data.email//,
-                            //"device_id": $cordovaDevice.getUUID()
+                            "email": "" + $scope.data.email/*,
+                            "device_id": $cordovaDevice.getUUID()*/
                         }
                     })
                     .then(function (d) {
@@ -408,7 +413,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })
 
     .controller('DigieyeCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $stateParams,
-                                         $cordovaGeolocation, $localstorage, $cordovaBarcodeScanner,
+                                         $cordovaGeolocation, $localstorage,  $cordovaBarcodeScanner,
                                          $cordovaFileTransfer, $cordovaCamera, BlueTeam) {
 
         $scope.data = {};
@@ -426,7 +431,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
         $scope.scanBarcode = function () {
             $cordovaBarcodeScanner.scan().then(function (imageData) {
                 //alert(imageData.text);
-
+                if(imageData.text)
                 BlueTeam.getUserById(imageData.text)
                     .then(function (d) {
 
@@ -539,6 +544,13 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                 function (err) {
                     $ionicLoading.show({template: 'error...', duration: 500});
                 })
+        };
+
+        $scope.calculateAge = function calculateAge(birthdayRaw) { // birthday is a date
+            var birthday = new Date(birthdayRaw);
+            var ageDifMs = Date.now() - birthday.getTime();
+            var ageDate = new Date(ageDifMs); // miliseconds from epoch
+            return Math.abs(ageDate.getUTCFullYear() - 1970);
         };
 
         $scope.uploadPicture = function () {
@@ -1106,7 +1118,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
     })
 
-    .controller('SeeRequestCtrl', function ($scope, $state, $window, $cordovaGeolocation,
+    .controller('SeeRequestCtrl', function ($scope, $state, $window, $cordovaGeolocation, 
                                             $ionicLoading, $timeout, $ionicPopup, $ionicHistory, $timeout, $stateParams, $localstorage, BlueTeam) {
 
         $scope.data = {};
@@ -1191,8 +1203,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                                 "user_id": $localstorage.get('user_id'),
                                 "gps_location": $scope.position.coords.latitude + ',' + $scope.position.coords.longitude,
                                 "key": key,
-                                "value": value//,
-                                //"device_id": $cordovaDevice.getUUID()
+                                "value": value/*,
+                                "device_id": $cordovaDevice.getUUID()*/
                             }
                         })
                         .then(function (d) {
@@ -1285,7 +1297,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })
 
     .controller('TakePaymentCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $stateParams,
-                                             $cordovaGeolocation, $localstorage, BlueTeam) {
+                                             $cordovaGeolocation, $localstorage,  BlueTeam) {
         $scope.data = {};
 
 
@@ -1366,8 +1378,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                         "mobile": "" + $scope.data.mobile,
                         "gps_location": $scope.position.coords.latitude + ',' + $scope.position.coords.longitude,
 
-                        "user_id": $localstorage.get('user_id')//,
-                        //"device_id": $cordovaDevice.getUUID()
+                        "user_id": $localstorage.get('user_id')/*,
+                        "device_id": $cordovaDevice.getUUID()*/
                     }
                 })
                 .then(function (d) {
@@ -1400,6 +1412,13 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
         };
 
         $scope.show();
+
+        $scope.calculateAge = function calculateAge(birthdayRaw) { // birthday is a date
+            var birthday = new Date(birthdayRaw);
+            var ageDifMs = Date.now() - birthday.getTime();
+            var ageDate = new Date(ageDifMs); // miliseconds from epoch
+            return Math.abs(ageDate.getUTCFullYear() - 1970);
+        };
 
         BlueTeam.getRefWorkers($scope.user_id)
             .then(function (d) {
@@ -1555,7 +1574,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })
 
     .controller('AddWorkerCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $stateParams,
-                                           $cordovaGeolocation, $localstorage, $cordovaBarcodeScanner,
+                                           $cordovaGeolocation, $localstorage,  $cordovaBarcodeScanner,
                                            $cordovaFileTransfer, $cordovaCamera, BlueTeam) {
 
         $scope.slots = [
@@ -1739,7 +1758,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })
 
     .controller('BookCtrl', function ($scope, $state, $ionicLoading, $timeout, $ionicHistory, $stateParams,
-                                      $cordovaGeolocation, $localstorage, BlueTeam) {
+                                      $cordovaGeolocation, $localstorage,  BlueTeam) {
         //for datetime picker
         console.log("start book ctrl");
         $scope.datetimeValue = new Date();
@@ -1848,6 +1867,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                         "location": $scope.position.coords.latitude + ',' + $scope.position.coords.longitude,
                         "requirements": $scope.service,
                         "user_id": $localstorage.get('user_id'),
+                        "user_type": $localstorage.get('type'),
                         "start_datatime": $scope.data.drv + "",
                         "service_type": $scope.type,
                         "remarks": $scope.type + " by web app," + $scope.data.remark,
@@ -1855,8 +1875,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                         "end_time": $scope.data.endTime,
                         "address": $scope.data.address,
                         "remark": $scope.data.remark,
-                        "priority": "" + 3//,
-                        //"device_id": $cordovaDevice.getUUID()
+                        "priority": "" + 3/*,
+                        "device_id": $cordovaDevice.getUUID()*/
                     }
                 })
                 .then(function (d) {
