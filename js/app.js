@@ -243,7 +243,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                         controller: 'AddWorkerCtrl'
                     }
                 }
-            })*/
+            })
 
             .state('tab.addvender', {
                 url: '/addvender',
@@ -253,7 +253,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                         controller: 'AddWorkerCtrl'
                     }
                 }
-            })
+            })*/
 
             .state('tab.seerequest', {
                 url: '/seerequest',
