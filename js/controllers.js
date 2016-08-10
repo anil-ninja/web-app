@@ -58,10 +58,6 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
     })
 
-    /*.controller('ContactCtrl', function ($scope, Contactlist) {
-        $scope.contacts = Contactlist.getAllContacts();
-    })*/
-
     .controller('WorkerTimerCtrl', function ($scope, $state, $ionicLoading, $window, $ionicHistory, $cordovaGeolocation,
                                              $localstorage, PhoneContactsFactory, $timeout, $ionicPlatform, BlueTeam) {
         $scope.stop = true;
