@@ -72,7 +72,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
             })
 
-            /*.state('tab.digieye', {
+            .state('tab.digieye', {
 
                 url: '/digieye',
                 views: {
@@ -106,7 +106,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                     }
                 }
 
-            })*/
+            })
 
             .state('tab.service-list', {
                 url: '/service-list',
@@ -235,7 +235,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
             })
 
-            /*.state('tab.addworker', {
+            .state('tab.addworker', {
                 url: '/addworker',
                 views: {
                     'information': {
@@ -253,7 +253,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                         controller: 'AddWorkerCtrl'
                     }
                 }
-            })*/
+            })
 
             .state('tab.seerequest', {
                 url: '/seerequest',
