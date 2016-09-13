@@ -226,14 +226,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                 }
             })
 
-            .state('tab.present_workers', {
+            .state('tab.present_workers/:id', {
                 url: '/present_workers/:id',
-                views: {
-                    'present_workers': {
-                        templateUrl: 'templates/present_workers.html',
-                        controller: 'PresentWorkersCtrl'
-                    }
-                }
+                templateUrl: 'templates/present_workers.html',
+                controller: 'PresentWorkersCtrl'
             })
 
             .state('finish', {
