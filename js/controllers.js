@@ -1563,6 +1563,11 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
     })
 
+    .controller('PresentWorkersCtrl', function ($scope, $state, $ionicHistory, $timeout, $stateParams, BlueTeam) {
+        $scope.service = $stateParams.id;
+        console.log($scope.service);
+        $state.go('finish');
+    })
 
     .controller('TabCtrl', function ($scope, $state, $ionicPopup, $cordovaSocialSharing, $ionicPlatform, $ionicModal, $timeout, $ionicHistory, $cordovaToast, $localstorage) {
 
@@ -1957,7 +1962,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                 .then(function (d) {
                     $scope.hide();
                     $ionicHistory.clearHistory();
-                    $state.go('finish');
+                    $state.go('tab.present_workers/'+$scope.service);
                     //$scope.services = d['data']['services'];
                 });
         };
