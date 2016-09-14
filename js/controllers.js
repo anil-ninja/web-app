@@ -1563,9 +1563,8 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
     })
 
-    .controller('PresentWorkersCtrl', function ($scope, $state, $ionicHistory, $timeout, $stateParams, BlueTeam) {
-        $scope.service = $stateParams.id;
-        console.log($scope.service);
+    .controller('AreasCtrl', function ($scope, $state, $ionicHistory, $timeout, $stateParams, BlueTeam) {
+        
         $scope.data.name = $localstorage.get('name');
         $scope.data.mobile = parseInt($localstorage.get('mobile'));
         $scope.data.address = $localstorage.get('address');
@@ -1612,6 +1611,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
         
         $scope.show();
+
         BlueTeam.getAreas().then(function (d) {
 
             $ionicHistory.clearHistory();
@@ -1619,7 +1619,22 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
             console.log(JSON.stringify($scope.areas));
             $scope.hide();
         });
-        
+        BlueTeam.getServices("?type=monthly").then(function (d) {
+
+            $ionicHistory.clearHistory();
+            $scope.montlhyServices = d['root'];
+            console.log(JSON.stringify($scope.montlhyServices));
+            $scope.hide();
+        });
+        $scope.searchWorker = function () {
+            BlueTeam.searchWorker($scope.data.area, $scope.data.service)
+                .then(function (d) {
+                    $scope.hide();
+                    $ionicHistory.clearHistory();
+                    $state.go('finish');
+                    //$scope.services = d['data']['services'];
+                });
+        };
     })
 
     .controller('TabCtrl', function ($scope, $state, $ionicPopup, $cordovaSocialSharing, $ionicPlatform, $ionicModal, $timeout, $ionicHistory, $cordovaToast, $localstorage) {

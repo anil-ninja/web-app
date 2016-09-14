@@ -84,6 +84,18 @@ angular.module('starter.services', [])
                 // Return the promise to the controller
                 return promise;
             },
+            searchWorker: function (area, service) {
+                // $http returns a promise, which has a then function, which also returns a promise
+                console.log(JSON.stringify(data));
+                var promise = $http.get(url + '/worker?area_id=' + area + '&service=' + service, data).then(function (response) {
+                    // The then function here is an opportunity to modify the response
+                    console.log(JSON.stringify(response));
+                    // The return value gets picked up by the then in the controller.
+                    return response.data;
+                });
+                // Return the promise to the controller
+                return promise;
+            },
             checkMobile: function (mobile) {
                 // $http returns a promise, which has a then function, which also returns a promise
                 var promise = $http.get(url + '/check-mobile/' + mobile).then(function (response) {

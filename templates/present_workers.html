@@ -1,47 +1,30 @@
-<ion-view view-title="Currently available workers by Shatkon Labs Pvt. Ltd." >
-    <ion-content class="padding" style="margin-top: -50px">
+<ion-view view-title="Workers">
+    <ion-content class="padding" style="margin-top: -60px">
+        <div class="card " ng-repeat="worker in workers" ng-class="">
+            <div id="profile-bg">
+            </div>
+            <div id="content">
+                <div id="profile-info">
+                    <img id="profile-image" src="http://api.file-dog.shatkonlabs.com/files/rahul/{{worker.photo}}">
+                    <h3 id="profile-name">{{worker.name}} <i class="icon ion-checkmark-circled balanced"></i></h3>
 
-        <div class="card" >
-            <form  name="confirm">
-                <div class="list">
+                    <span id="profile-description">
+                        <a class="icon-left ion-ios7-telephone" ng-href="tel: +91 {{worker.mobile}}">
+                            <span class="ion-android-call large"></span>
+                            +91 {{worker.mobile}}
+                        </a> , {{worker.rating}}/5<span class="ion-star large"></span>, AGE: {{ calculateAge(worker.dob) }}
+                    </span>
 
-                    <label class="item item-input item-select">
-                        <div class="input-label">
-                            Select Your Area
-                        </div>
-                        <select name="area" ng-model="data.area">
-                            <option value="{{ area }}" ng-repeat="area in areas" >{{ area | uppercase}}</option>
-
-                        </select>
-                    </label>
-                    
+                    <h4><span class="ion-android-home large"></span> {{worker.address}}, {{worker.area}} </h4>
+                    <h5> Emergency <a class="icon-left ion-ios7-telephone" ng-href="tel: +91 {{worker.emergency_no}}">
+                        <span class="ion-android-call large"></span>
+                        +91 {{worker.emergency_no}}
+                    </a>
+                    </h5>
                 </div>
-
-            </form>
-
-        </div>
-
-        
-
-        <div class='card'>
-            <div style="text-align: center;">
-                <h4>
-                    No service charge, No commission <br/> Pay per Use
-
-                </h4>
-                <i style="font-style: italic;font-size: 0.8em">pay only as much as days you use (minimum pay 21 days)</i>
             </div>
 
         </div>
 
-        <div class='card'>
-            <div style="text-align: center;">
-                <i> For queries and issues. Please contact us at<br/>
-                    <a class="icon-left ion-ios7-telephone" ng-href="tel: +91 9599075355"><span class="ion-android-call large"></span><b> +91 9599075355 </b> </a> <br />
-                    <a href="#" onclick="window.open('mailto:info@blueteam.in','_system')" >info@blueteam.in</a><br />
-                    <a href="#" onclick="window.open('http://www.BlueTeam.in','_system')"> www.BlueTeam.in </a>
-                </i>
-            </div>
-        </div>
     </ion-content>
 </ion-view>
