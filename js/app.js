@@ -227,7 +227,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
             })
 
             .state('present_workers', {
-                url: '/present_workers/:id',
+                url: '/present_workers',
                 templateUrl: 'present_workers.html',
                 controller: 'PresentWorkersCtrl'
             })

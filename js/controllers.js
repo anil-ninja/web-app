@@ -2015,7 +2015,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                 .then(function (d) {
                     $scope.hide();
                     $ionicHistory.clearHistory();
-                    $state.go('/present_workers/'+$scope.service);
+                    $state.go('/present_workers');
                     //$scope.services = d['data']['services'];
                 });
         };
