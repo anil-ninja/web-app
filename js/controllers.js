@@ -1563,6 +1563,11 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
     })
 
+    .controller('PresentWorkersCtrl', function ($scope, $state, $ionicHistory, $timeout, $stateParams, BlueTeam) {
+
+
+    })
+
     .controller('AreasCtrl', function ($scope, $state, $ionicHistory, $timeout, $stateParams, BlueTeam) {
         
         $scope.data.name = $localstorage.get('name');
