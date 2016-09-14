@@ -1564,7 +1564,52 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
     })
 
     .controller('PresentWorkersCtrl', function ($scope, $state, $ionicHistory, $timeout, $stateParams, BlueTeam) {
+        $scope.data.name = $localstorage.get('name');
+        $scope.data.mobile = parseInt($localstorage.get('mobile'));
+        $scope.data.address = $localstorage.get('address');
 
+        $scope.position = {
+            "coords": {
+                "longitude": null,
+                "latitude": null
+            }
+        };
+        // to get current location of the user
+        var posOptions = {
+            timeout: 10000,
+            enableHighAccuracy: false
+        };
+        $cordovaGeolocation
+            .getCurrentPosition(posOptions)
+            .then(function (position) {
+
+                $scope.position = position;
+
+            }, function (err) {
+                // error
+                console.log(JSON.stringify(err));
+                $scope.position = {
+                    "coords": {
+                        "longitude": null,
+                        "latitude": null
+                    }
+                };
+            });
+        $scope.show = function () {
+            $ionicLoading.show({
+                template: 'Loading...'
+            });
+            $timeout(function () {
+                $scope.hide();
+            }, 5000);
+
+        };
+        $scope.hide = function () {
+            $ionicLoading.hide();
+        };
+
+        
+        $scope.show();
 
     })
 
