@@ -1608,7 +1608,12 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
             $ionicLoading.hide();
         };
 
-        
+        $scope.calculateAge = function calculateAge(birthdayRaw) { // birthday is a date
+            var birthday = new Date(birthdayRaw);
+            var ageDifMs = Date.now() - birthday.getTime();
+            var ageDate = new Date(ageDifMs); // miliseconds from epoch
+            return Math.abs(ageDate.getUTCFullYear() - 1970);
+        };
         $scope.show();
 
     })
