@@ -16,7 +16,7 @@ angular.module('starter.services', [])
                 // Return the promise to the controller
                 return promise;
             },
-            getAreas: function () {
+            /*getAreas: function () {
                 // $http returns a promise, which has a then function, which also returns a promise
                 var promise = $http.get(url + '/areas' ).then(function (response) {
                     // The then function here is an opportunity to modify the response
@@ -26,7 +26,7 @@ angular.module('starter.services', [])
                 });
                 // Return the promise to the controller
                 return promise;
-            },
+            },*/
             getWork: function (worker_id) {
                 // $http returns a promise, which has a then function, which also returns a promise
                 var promise = $http.get(url + '/work/' + worker_id + "?current_time=" + new Date()).then(function (response) {
@@ -84,7 +84,7 @@ angular.module('starter.services', [])
                 // Return the promise to the controller
                 return promise;
             },
-            searchWorker: function (area, service) {
+            /*searchWorker: function (area, service) {
                 // $http returns a promise, which has a then function, which also returns a promise
                 console.log(JSON.stringify(data));
                 var promise = $http.get(url + '/worker/search?area_id=' + area + '&service=' + service, data).then(function (response) {
@@ -95,7 +95,7 @@ angular.module('starter.services', [])
                 });
                 // Return the promise to the controller
                 return promise;
-            },
+            },*/
             checkMobile: function (mobile) {
                 // $http returns a promise, which has a then function, which also returns a promise
                 var promise = $http.get(url + '/check-mobile/' + mobile).then(function (response) {

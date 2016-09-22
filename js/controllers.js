@@ -1563,7 +1563,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
 
     })
 
-    .controller('PresentWorkersCtrl', function ($scope, $state, $ionicHistory, $timeout, $stateParams, BlueTeam) {
+    /*.controller('PresentWorkersCtrl', function ($scope, $state, $ionicHistory, $timeout, $stateParams, BlueTeam) {
         $scope.data.name = $localstorage.get('name');
         $scope.data.mobile = parseInt($localstorage.get('mobile'));
         $scope.data.address = $localstorage.get('address');
@@ -1690,7 +1690,7 @@ angular.module('starter.controllers', ['ionic', 'ngCordova', 'ionic-timepicker',
                     //$scope.services = d['data']['services'];
                 });
         };
-    })
+    })*/
 
     .controller('TabCtrl', function ($scope, $state, $ionicPopup, $cordovaSocialSharing, $ionicPlatform, $ionicModal, $timeout, $ionicHistory, $cordovaToast, $localstorage) {
 
